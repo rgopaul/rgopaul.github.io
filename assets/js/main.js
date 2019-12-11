@@ -119,7 +119,10 @@
 						locked = true;
 
 				// Article already visible? Just swap articles.
-					if ($body.hasClass('is-article-visible')) {
+					if ($body.hasClass('is-article-visible') && !$body.hasClass('article-stay')) {
+
+						if($body.hasClass('article-stay'))
+						return;
 
 						// Deactivate current article.
 							var $currentArticle = $main_articles.filter('.active');
@@ -203,6 +206,8 @@
 
 				// Article not visible? Bail.
 					if (!$body.hasClass('is-article-visible'))
+						return;
+					if($body.hasClass('article-stay'))
 						return;
 
 				// Add state?
@@ -288,9 +293,9 @@
 
 		// Articles.
 			$main_articles.each(function() {
-
+				if($body.hasClass('article-stay'))
+				return;
 				var $this = $(this);
-
 				// Close.
 					$('<div class="close">Close</div>')
 						.appendTo($this)
