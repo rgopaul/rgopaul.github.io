@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>Randy Gopaul - Portfolio</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/blog.css" />
+	<link href="assets/css/all.css" rel="stylesheet">
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+
+<body class="article-stay">
+	<div id="wrapper">
+		<div id="main">
+			<article id="blog" class="active">
+				<a href="index.html#other" class="back"><i class="fas fa-arrow-left fa-2x"></i></a>
+				<center>
+					<h2>
+						Post Global GameJam - Feb 13th
+					</h2>
+				</center>
+				<p> It's been a few days since the Global Game Jam and I've finally had some time to post an update!
+					For those who don't know what a game jam is, it's basically a hackathon for video games. 
+					During these events participaints are given a short period of time (24-72 hours) to plan, design, and create a game around a specific theme.
+					This was my first game jam so I got to meet a lot of new faces and work with very talented people.
+					If you'd like to download and try the game we submitted you can visit <a href ="https://globalgamejam.org/2020/games/dam-mit-all-5" >here</a> or view a gameplay demo
+					<a href ="https://www.youtube.com/watch?v=1iDM2Xgy2z0">here</a> 
+				</p>
+				
+				<h3>
+					What did we make?
+				</h3>
+				<p>
+					The theme of the Global Game Jam was "repair" so the team designed a 2D game with the objective of repairing broken pieces of a dam. 
+					Gameplay is similar to that of whack a mole where random leaking tiles appear for the player to fix.
+					The player navigates on a grid of tiles and presses space to repair any leaking tiles.
+					If a tile is leaking too long it permanently breaks and the player is no longer able to repair it nor pass through it.
+				</p>
+
+				<h3>
+					What did I work on?
+				</h3>
+				<p>
+					I handled the game logic for the tiles and setting up the animations and art made by the <a href ="https://www.linkedin.com/in/carlos-abdu">Carlos Abdu</a>. 
+					The way each tile works is by using a script allowing a 50% chance to cause a tile to leak every five seconds.
+					Once the tile is leaking the player has five seconds to repair the tile before it is broken permanently and becomes impassable.
+				</p>
+
+				<h3>
+					The Challenges
+				</h3>
+				<p>
+					In regards to handling the game logic, initially each tile worked independently but that quickly got out of hand. 
+					By implementing the tiles this way it was possible for several tiles to leak at the start of the game.
+					So I had to come up with a more creative solution; this is where I utilized Unity's parent / child system.
+					<br> </br>
+					By creating an empty parent Game Object I could set any number of tile Game Objects as a child where I could control them all at once.
+					I attached a script to the empty parent that grabbed all the child objects in an arry and toggled a tile to activate on a random timer.
+					When a tile is active they work as they did before by testing to see if they'll leak every five seconds. 
+					<br> </br>
+					This introduces a few new problems. I still have a chance to activate all tiles overtime which eventually leads us back to the initial problem.
+					To fix this I created another array that tracks how many activate tiles we can have, in this case four. 
+					If the script is going to activate a tile it first checks the array to see if we have space to activate another.
+					If it does have space it stores the tile its going to activate and activates it. 
+					If it doesn't have space it randomly selects an active tile from the array, disables it, then replaces it with the new tile its going to activate.
+					One last edge case I covered was to check to make sure it was not deactivating any leaking tiles.
+					<br> </br>
+					Also because activation is still by chance, we could go several seconds before a tile is activated then several more seconds before a tile is finally leaking.
+					To fix this issue I made it so that if either of the chances fails after a specified amount of times 
+					then we force the probability to 100% for the next attempt.
+					<br></br>
+					One last thing I added was conditional that activates all tiles at once. When the timer in the game hits a set point all tiles become active 
+					and the tile limit is no longer referenced. 
+					This was a creative way to make the problem we intially had a feature that challenges the player towards the end of the game.
+				</p>
+				<h3>
+					Cut Corners
+				</h3>
+				<p>			
+					A lot of planned content was unfinished due to time constraints since we only had 48 hours to develop this game:
+					<li>Character Animations were cut entirely</li>
+					<li>Character movement was meant to be locked into a grid instead of being able to freely move around</li>
+					<li>We planned a water meter to fill up over time if the player failed to repair tiles</li>
+					<li>The player was meant to lose if they stayed on a leaking tile before it broke. </li>
+					<li>Instead of any of the previously mentioned cuts we rushed a game over and set it activate when the timer runs out.</li>
+					<li>The tile randomizer would often replace the first possible tile it could. This was because I removed code I forgot to add back.</li>
+					<br></br>
+					A lot of these cuts could have easily been implemented if we were given another day. Unfortunately, we lost a lot of time due to traveling back and forth to the site 
+					and brainstorming the concept for the game.
+				</p>
+
+			</article>
+		</div>
+		<footer id="footer">
+
+		</footer>
+	</div>
+
+	<!-- BG -->
+	<div id="bg"></div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
